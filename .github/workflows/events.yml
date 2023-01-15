@@ -4,6 +4,7 @@ on:
     # pull_requestのtypesはデフォルトで[opened, synchronize, reopened]の3つがトリガーで発生する。
     # 他のトリガーと比べて、pull_requestのtypesの種類が一番多いらしい。
     types: [opened, edited]
+    branches: [master]
   workflow_dispatch:
 jobs:
   deploy:
@@ -11,6 +12,8 @@ jobs:
     steps:
       - name: Output event data
         run: echo "${{ toJSON(github.event) }}"
+      - name: echo base_branch
+        run: echo "base_branch = ${{ github.base_ref }}"
       - name: Get code
         uses: actions/checkout@v3
       - name: Install dependencies
