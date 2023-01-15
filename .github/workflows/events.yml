@@ -4,13 +4,45 @@ on:
     # pull_requestのtypesはデフォルトで[opened, synchronize, reopened]の3つがトリガーで発生する。
     # 他のトリガーと比べて、pull_requestのtypesの種類が一番多いらしい。
     types: [opened, edited]
+    branches: [master]
   workflow_dispatch:
+  push:
+    branches:
+      - main
+      # *は、/以外の任意の文字0個以上にマッチする。dev/helloのようなブランチはマッチしない。
+      - 'dev-*'
+      # **は、 /も含めた任意の文字0個以上にマッチする。
+      - 'feat/**'
+    # branches-ignore:      # branchesと一緒には使えない。
+    #   - "document/**"  
+    # paths:                # 対象とするファイルパターンを指定できる。
+    #   - '**.js'
+    #   - '**.jsx'
+    #   - '**.vue'
+    paths-ignore:           # pathsと一緒には使えない。
+      - "**.json"
+      - ".github/workflows/**"
+
+
+    # 例えば、ソースコード上の変更が、コメントアウトを追加したのみの場合、ワークフローを実行する必要がない。
+    # そのような場合に、コミットメッセージに、
+    #
+    # [skip ci]
+    # [ci skip]
+    # [no ci]
+    # [skip actions]
+    # [actions skip]
+    #
+    # のいずれかを記載することにより、ワークフローの実行をスキップすることができる。
+    # ※ この方法でスキップできるのは、pushとpull_requestのみ。 pull_request_targetなど他がトリガーの時はスキップされない。
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Output event data
         run: echo "${{ toJSON(github.event) }}"
+      - name: echo base_branch
+        run: echo "base_branch = ${{ github.base_ref }}"
       - name: Get code
         uses: actions/checkout@v3
       - name: Install dependencies

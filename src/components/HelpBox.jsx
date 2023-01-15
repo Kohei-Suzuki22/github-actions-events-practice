@@ -2,6 +2,7 @@ import { string } from 'prop-types';
 
 import './HelpBox.css';
 
+// コメントアウトを追加したのみの変更をコミットしてみると。
 function HelpBox({ title, text }) {
   return (
     <article className="help-box">
