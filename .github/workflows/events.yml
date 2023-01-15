@@ -1,5 +1,10 @@
 name: Events Demo 1
-on: ...
+on:
+  pull_request:
+    # pull_requestのtypesはデフォルトで[opened, synchronize, reopened]の3つがトリガーで発生する。
+    # 他のトリガーと比べて、pull_requestのtypesの種類が一番多いらしい。
+    types: [opened, edited]
+  workflow_dispatch:
 jobs:
   deploy:
     runs-on: ubuntu-latest
