@@ -6,6 +6,22 @@ on:
     types: [opened, edited]
     branches: [master]
   workflow_dispatch:
+  push:
+    branches:
+      - main
+      # *は、/以外の任意の文字0個以上にマッチする。dev/helloのようなブランチはマッチしない。
+      - 'dev-*'
+      # **は、 /も含めた任意の文字0個以上にマッチする。
+      - 'feat/**'
+    # branches-ignore:      # branchesと一緒には使えない。
+    #   - "document/**"  
+    # paths:                # 対象とするファイルパターンを指定できる。
+    #   - '**.js'
+    #   - '**.jsx'
+    #   - '**.vue'
+    paths-ignore:           # pathsと一緒には使えない。
+      - "**.json"
+      - ".github/workflows/**"
 jobs:
   deploy:
     runs-on: ubuntu-latest
